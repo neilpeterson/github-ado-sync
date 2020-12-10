@@ -13,6 +13,12 @@
         },
         "location": {
             "type": "string"
+        },
+        "GitHubPAT": {
+            "type": "securestring"
+        },
+        "AzureDevOpsPAT": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -22,7 +28,6 @@
         "ApplicationInsightsLocation": "West Europe",
         "timezone": "UTC",
         "runtimeStack": "powershell"
-        // "contributorRoleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
     },
     "resources": [
         {
@@ -69,6 +74,14 @@
                         {
                             "name": "WEBSITE_TIME_ZONE",
                             "value": "[variables('timezone')]"
+                        },
+                                                {
+                            "name": "GitHubPAT",
+                            "value": "[parameters('GitHubPAT')]"
+                        },
+                                                {
+                            "name": "AzureDevOpsPAT",
+                            "value": "[parameters('AzureDevOpsPAT')]"
                         }
                     ],
                     "scmType": "None"
@@ -120,7 +133,7 @@
         },
         {
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02-preview",
+            "apiVersion": "2018-05-01-preview",
             "name": "[parameters('functionAppName')]",
             "location": "[variables('ApplicationInsightsLocation')]",
             "tags": {
@@ -132,20 +145,6 @@
                 "WorkspaceResourceId": "[parameters('workSpaceResourceId')]"
             }
         }
-        // {
-        //     "type": "Microsoft.Authorization/roleAssignments",
-        //     "apiVersion": "2020-04-01-preview",
-        //     "name": "[guid(concat(resourceGroup().id, 'contributor'))]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-        //     ],
-        //     "properties": {
-        //         "roleDefinitionId": "[variables('contributorRoleDefinitionId')]",
-        //         "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2018-02-01', 'Full').identity.principalId]",
-        //         "scope": "[resourceGroup().id]",
-        //         "principalType": "ServicePrincipal"
-        //     }
-        // }
     ],
     "outputs": {
         "functionKey": {

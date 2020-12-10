@@ -1,7 +1,18 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": { },
+    "parameters": {
+        "GitHubPAT": {
+            "type": "securestring"
+        },
+        "AzureDevOpsPAT": {
+            "type": "securestring"
+        },
+        "RemoveSourceControll": {
+            "type": "bool",
+            "defaultValue": true
+        }
+    },
     "variables": {
         "log-analytics-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-log-analytics.json')]",
         "powershell-function-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-powershell-function.json')]",
@@ -53,32 +64,39 @@
                     },
                     "location": {
                         "value": "[variables('location')]"
+                    },
+                    "GitHubPAT": {
+                        "value": "[parameters('GitHubPAT')]"
+                    },
+                    "AzureDevOpsPAT": {
+                        "value": "[parameters('AzureDevOpsPAT')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[parameters('RemoveSourceControll')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "bootstrap",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'powershell-function')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('bootstrap-template')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "functionAppName": {
+                        "value": "[variables('functionAppName')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
                     }
                 }
             }
         }
-        // {
-        //     "type": "Microsoft.Resources/deployments",
-        //     "apiVersion": "2019-10-01",
-        //     "name": "bootstrap",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Resources/deployments', 'powershell-function')]"
-        //     ],
-        //     "properties": {
-        //         "mode": "Incremental",
-        //         "templateLink": {
-        //             "uri": "[variables('bootstrap-template')]",
-        //             "contentVersion": "1.0.0.0"
-        //         },
-        //         "parameters": {
-        //             "functionAppName": {
-        //                 "value": "[variables('functionAppName')]"
-        //             },
-        //             "location": {
-        //                 "value": "[variables('location')]"
-        //             }
-        //         }
-        //     }
-        // }
     ]
 }
