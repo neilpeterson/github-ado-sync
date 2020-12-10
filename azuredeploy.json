@@ -1,0 +1,84 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": { },
+    "variables": {
+        "log-analytics-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-log-analytics.json')]",
+        "powershell-function-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-powershell-function.json')]",
+        "bootstrap-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-bootstrap.json')]",
+        "functionAppName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
+        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "log-analytics",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('log-analytics-template')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "powershell-function",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('powershell-function-template')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workSpaceResourceId": {
+                        "value": "[reference('log-analytics').outputs.workSpaceResourceId.value]"
+                    },
+                    "functionAppName": {
+                        "value": "[variables('functionAppName')]"
+                    },
+                    "functionSourceRepo": {
+                        "value": "[variables('functionSourceRepo')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    }
+                }
+            }
+        }
+        // {
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2019-10-01",
+        //     "name": "bootstrap",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Resources/deployments', 'powershell-function')]"
+        //     ],
+        //     "properties": {
+        //         "mode": "Incremental",
+        //         "templateLink": {
+        //             "uri": "[variables('bootstrap-template')]",
+        //             "contentVersion": "1.0.0.0"
+        //         },
+        //         "parameters": {
+        //             "functionAppName": {
+        //                 "value": "[variables('functionAppName')]"
+        //             },
+        //             "location": {
+        //                 "value": "[variables('location')]"
+        //             }
+        //         }
+        //     }
+        // }
+    ]
+}
