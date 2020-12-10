@@ -8,6 +8,12 @@
         "AzureDevOpsPAT": {
             "type": "securestring"
         },
+        "ADOOrganization": {
+            "type": "string"
+        },
+        "ADOProjectName": {
+            "type": "string"
+        },
         "RemoveSourceControll": {
             "type": "bool",
             "defaultValue": true
@@ -70,6 +76,12 @@
                     },
                     "AzureDevOpsPAT": {
                         "value": "[parameters('AzureDevOpsPAT')]"
+                    },
+                    "ADOOrganization": {
+                        "value": "[parameters('ADOOrganization')]"
+                    },
+                    "ADOProjectName": {
+                        "value": "[parameters('ADOProjectName')]"
                     }
                 }
             }

@@ -14,8 +14,8 @@ $GitHubIssueDetails = @(
 # ADO details
 $AzureDevOpsPAT = $env:AzureDevOpsPAT
 $AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($AzureDevOpsPAT)")) }
-$UriOrganization = "https://nepeters-devops.visualstudio.com/"
-$ProjectName = "arm-template-validation-pipelines"
+$ADOOrganization = $env:ADOOrganization
+$ADOProjectName = $env:ADOProjectName
 
 # GitHub details
 $GitHubPAT = $env:GitHubPAT
@@ -23,7 +23,7 @@ $GitHubPAT = $env:GitHubPAT
 # Work item details
 $WorkItemType = "bug"
 $WorkItemTitle = '#, {0} - {1}' -f $GitHubIssueDetails
-$uri = $UriOrganization + $ProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
+$uri = $ADOOrganization + $ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
 
 
 if($Request.Body.action -eq "Opened"){
@@ -66,7 +66,7 @@ if($Request.Body.action -eq "Opened"){
 
     # GitHub POST body
     $bodyObjectGitHub = @{
-        body    = "Thanks for reporting - this issue is under review.  This is a Microsoft Internal DevOps Bug ID AB#<a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $UriOrganization, $ProjectName, $ADOWorkItem.id
+        body    = "Thanks for reporting - this issue is under review.  This is a Microsoft Internal DevOps Bug ID AB#<a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $ADOOrganization, $ADOProjectName, $ADOWorkItem.id
     }
 
     # Create GitHub comment

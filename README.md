@@ -18,5 +18,5 @@ Run the following command to initiate the deployment.
 az deployment group create \
     --resource-group github-ado-sync \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
-    --parameters GitHubPAT=<> AzureDevOpsPAT=<>
+    --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ ADOProjectName=arm-template-validation-pipelines
 ```

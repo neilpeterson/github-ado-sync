@@ -19,6 +19,12 @@
         },
         "AzureDevOpsPAT": {
             "type": "securestring"
+        },
+        "ADOOrganization": {
+            "type": "string"
+        },
+        "ADOProjectName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -75,13 +81,21 @@
                             "name": "WEBSITE_TIME_ZONE",
                             "value": "[variables('timezone')]"
                         },
-                                                {
+                        {
                             "name": "GitHubPAT",
                             "value": "[parameters('GitHubPAT')]"
                         },
-                                                {
+                        {
                             "name": "AzureDevOpsPAT",
                             "value": "[parameters('AzureDevOpsPAT')]"
+                        },
+                        {
+                            "name": "ADOOrganization",
+                            "value": "[parameters('ADOOrganization')]"
+                        },
+                        {
+                            "name": "ADOProjectName",
+                            "value": "[parameters('ADOProjectName')]"
                         }
                     ],
                     "scmType": "None"
