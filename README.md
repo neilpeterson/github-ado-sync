@@ -17,5 +17,5 @@ Run the following command to initiate the deployment.
 ```azurecli
 az deployment group create \
     --resource-group github-ado-sync \
-    --template-uri hhttps://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/azuredeploy.json
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/azuredeploy.json
 ```
