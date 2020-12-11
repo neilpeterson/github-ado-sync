@@ -1,4 +1,4 @@
-\# Sync GitHub issues with Azure DevOps Boards
+# Sync GitHub issues with Azure DevOps Boards
 
 This solution deploys an Azure Function (PowerShell) that creates an Azure DevOps Boards work item for each GitHub issue raised on a named repository. An Azure Monitor alert is also created that sends an email to a named address when a function failure occurs.
 
