@@ -24,7 +24,7 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 
 ### Portal
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Fsamples%2Fmaster%2FOperationalExcellence%2Fazure-function-powershell%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fneilpeterson%2Fgithub-ado-sync%2Fmaster%2Fdeployment%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>  
 
@@ -33,16 +33,16 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 Create a resource group for the deployment.
 
 ```azurecli
-az group create --name github-ado-sync-niner001 --location eastus
+az group create --name github-ado-sync --location eastus
 ```
 
 Run the following command to initiate the deployment.
 
 ```azurecli
 az deployment group create \
-    --resource-group github-ado-sync-niner001 \
+    --resource-group github-ado-sync \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
-    --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
+    --parameters GitHubPAT=6544dd075258b8f90bb3aec46f00b9f5d79574c0 AzureDevOpsPAT=din2avxfjrvsdzsg6djxyux24jtvs4mwpeoiwaqelgdgae7gwmiq ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \
     ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238
