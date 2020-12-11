@@ -14,6 +14,9 @@
         "ADOProjectName": {
             "type": "string"
         },
+        "emailAddress": {
+            "type": "string"
+        },
         "RemoveSourceControll": {
             "type": "bool",
             "defaultValue": true
@@ -23,7 +26,9 @@
         "log-analytics-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-log-analytics.json')]",
         "powershell-function-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-powershell-function.json')]",
         "bootstrap-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-bootstrap.json')]",
+        "action-group-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-action-group.json')]",
         "functionAppName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
+        "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
         "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
         "location": "[resourceGroup().location]"
     },
@@ -41,6 +46,38 @@
                 "parameters": {
                     "location": {
                         "value": "[variables('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "action-group",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('action-group-template')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspaceName": {
+                        "value": "[reference('log-analytics').outputs.workspaceName.value]"
+                    },
+                    "functionKey": {
+                        "value": "[reference('powershell-function').outputs.functionKey.value]"
+                    },
+                    "alertQuery": {
+                        "value": "[variables('alertQuery')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "emailAddress": {
+                        "value": "[parameters('emailAddress')]"
                     }
                 }
             }
