@@ -14,12 +14,12 @@
         "ADOProjectName": {
             "type": "string"
         },
-        "emailAddress": {
+        "EmailAddress": {
             "type": "string"
         },
         "RemoveSourceControll": {
             "type": "bool",
-            "defaultValue": true
+            "defaultValue": false
         }
     },
     "variables": {
