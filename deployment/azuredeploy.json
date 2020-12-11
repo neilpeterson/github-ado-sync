@@ -67,9 +67,6 @@
                     "workspaceName": {
                         "value": "[reference('log-analytics').outputs.workspaceName.value]"
                     },
-                    "functionKey": {
-                        "value": "[reference('powershell-function').outputs.functionKey.value]"
-                    },
                     "alertQuery": {
                         "value": "[variables('alertQuery')]"
                     },

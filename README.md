@@ -1,3 +1,11 @@
+# Sync GitHub issues with Azure DevOps Boards
+
+This solution deploys an Azure Function (PowerShell) that creates an Azure DevOps Boards work item for each GitHub issue raised on a named repository. All supporting infrastructure is also deployed. An Azure Monitor alert is created that sends an email to a named address when a function failure occurs.
+
+**Source Control**
+
+Once deployed, the Azure Function is connected to the GitHub repository, where the function is stored and configured for manual sync. The ARM template includes logic to remove this source control integration. See the parameters and examples for details on how to deploy without source control integration.
+
 ## Solution depolyment parameters
 
 | Parameter | Type | Description |
@@ -34,6 +42,8 @@ az deployment group create \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com
 ```
+
+Add `RemoveSourceControll=true` to remove source controll integration.
 
 ```azurecli
 az deployment group create \
