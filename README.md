@@ -1,10 +1,8 @@
-# Sync GitHub issues with Azure DevOps Boards
-
-This solution deploys an Azure Function (PowerShell) that creates an Azure DevOps Boards work item for each GitHub issue raised on a named repository. An Azure Monitor alert is also created that sends an email to a named address when a function failure occurs.
+This solution deploys an HTTP triggered Azure Function (PowerShell) and all supporting infrastructure. The function is activated by a GitHub repository webhook each time a GitHub issue is created. The function creates an Azure DevOps Boards work item and updates the GitHub issue with these details. An Azure Monitor alert is also created, which sends an email to a specified email address when a function failure occurs.
 
 ## Configuration
 
-Once deployed, copy the Azure Function Url and use it as the **Payload URL** value in a GitHub webhook.
+Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook.
 
 ## Solution deployment parameters
 
@@ -33,14 +31,14 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 Create a resource group for the deployment.
 
 ```azurecli
-az group create --name github-ado-sync --location eastus
+az group create --name github-ado-sync-niner001 --location eastus
 ```
 
 Run the following command to initiate the deployment.
 
 ```azurecli
 az deployment group create \
-    --resource-group github-ado-sync \
+    --resource-group github-ado-sync-niner001 \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
