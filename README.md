@@ -1,3 +1,5 @@
+# GitHub ADO Sync
+
 This solution deploys an HTTP triggered Azure Function (PowerShell) and all supporting infrastructure. The function is activated by a GitHub repository webhook each time a GitHub issue is created. The function creates an Azure DevOps Boards work item and updates the GitHub issue with these details. An Azure Monitor alert is also created, which sends an email to a specified email address when a function failure occurs.
 
 ## Configuration
