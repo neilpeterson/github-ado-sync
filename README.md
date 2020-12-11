@@ -43,8 +43,8 @@ az deployment group create \
     --resource-group github-ado-sync \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
-    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com AreaPath=test-area-path \
-    ItterationPath=test-iteration-path \
+    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
+    ADOItterationPath=test-iteration-path \
     ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238
 ```
 
@@ -55,8 +55,8 @@ az deployment group create \
     --resource-group github-ado-sync \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
-    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com AreaPath=test-area-path \
-    ItterationPath=test-iteration-path \
+    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
+    ADOItterationPath=test-iteration-path \
     ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238 \
     RemoveSourceControll=true
 ```

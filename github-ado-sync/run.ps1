@@ -1,6 +1,6 @@
 using namespace System.Net
 
-# Input bindings are passed in via param block.
+# Input bindings are passed in via param block
 param($Request, $TriggerMetadata)
 
 # Get request details
@@ -11,23 +11,13 @@ $GitHubIssueDetails = @(
     $Request.Body.issue.comments_url # Link to GitHub Issue API
 )
 
-# ADO details
-$AzureDevOpsPAT = $env:AzureDevOpsPAT
-$AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($AzureDevOpsPAT)")) }
-$ADOOrganization = $env:ADOOrganization
-$ADOProjectName = $env:ADOProjectName
-$ADOAreaPath = $env:ADOAreaPath
-$ADOItterationPath = $env:ADOItterationPath
-$ADOParentWorkItem = $env:ADOParentWorkItem
-
-# GitHub details
-$GitHubPAT = $env:GitHubPAT
+# ADO Auth
+$AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($env:AzureDevOpsPAT)")) }
 
 # Work item details
 $WorkItemType = "bug"
 $WorkItemTitle = '{0} - {1}' -f $GitHubIssueDetails
-$uri = $ADOOrganization + $ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
-
+$uri = $env:ADOOrganization + $env:ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
 
 if($Request.Body.action -eq "Opened"){
 
@@ -46,19 +36,19 @@ if($Request.Body.action -eq "Opened"){
         @{
             op      = 'add'
             path    = '/fields/System.AreaPath'
-            value   = "$ADOProjectName\$ADOAreaPath"
+            value   = "$env:ADOProjectName\$env:ADOAreaPath"
         }
         @{
             op      = 'add'
             path    = '/fields/System.IterationPath'
-            value   = "$ADOProjectName\$ADOItterationPath"
+            value   = "$env:ADOProjectName\$env:ADOItterationPath"
         }
         @{
             op      = 'add'
             path    = '/relations/-'
             value   = @{
                 rel     = 'System.LinkTypes.Hierarchy-Reverse'
-                url     = $ADOParentWorkItem
+                url     = $env:ADOParentWorkItem
             }
         }
     )
@@ -69,11 +59,11 @@ if($Request.Body.action -eq "Opened"){
 
     # GitHub POST body
     $bodyObjectGitHub = @{
-        body    = "Thanks for reporting - this issue is under review.  This is a Microsoft Internal DevOps Bug ID AB#<a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $ADOOrganization, $ADOProjectName, $ADOWorkItem.id
+        body    = "Thanks for reporting - this issue is under review. This is a Microsoft Internal Azure DevOps Bug ID <a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $env:ADOOrganization, $env:ADOProjectName, $ADOWorkItem.id
     }
 
     # Create GitHub comment
-    $GitHubHeader = @{authorization = "Token $GitHubPAT"}
+    $GitHubHeader = @{authorization = "Token $env:GitHubPAT"}
     $bodyGitHub = ConvertTo-Json -InputObject $bodyObjectGitHub
     Invoke-RestMethod -Uri $GitHubIssueDetails[3] -Method Post -ContentType "application/json-patch+json" -Headers $GitHubHeader -Body $bodyGitHub
 }
