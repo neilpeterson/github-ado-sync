@@ -28,7 +28,7 @@ Create a resource group for the deployment.
 az group create --name github-ado-sync --location eastus
 ```
 
-Run the following command to initiate the deployment.
+Run the following command to initiate the deployment (update with details from your environment).
 
 ```azurecli
 az deployment group create \
