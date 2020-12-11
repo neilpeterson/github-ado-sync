@@ -22,14 +22,6 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 
 ## Solution deployment
 
-### Portal
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fneilpeterson%2Fgithub-ado-sync%2Fmaster%2Fdeployment%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>  
-
-### Azure CLI
-
 Create a resource group for the deployment.
 
 ```azurecli
