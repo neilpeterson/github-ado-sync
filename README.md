@@ -1,16 +1,12 @@
-# Sync GitHub issues with Azure DevOps Boards
+\# Sync GitHub issues with Azure DevOps Boards
 
-This solution deploys an Azure Function (PowerShell) that creates an Azure DevOps Boards work item for each GitHub issue raised on a named repository. All supporting infrastructure is also deployed. An Azure Monitor alert is created that sends an email to a named address when a function failure occurs.
+This solution deploys an Azure Function (PowerShell) that creates an Azure DevOps Boards work item for each GitHub issue raised on a named repository. An Azure Monitor alert is also created that sends an email to a named address when a function failure occurs.
 
-**Source Control**
+## Configuration
 
-Once deployed, the Azure Function is connected to the GitHub repository, where the function is stored and configured for manual sync. The ARM template includes logic to remove this source control integration. See the parameters and examples for details on how to deploy without source control integration.
+Once deployed, copy the Azure Function Url and use it as the **Payload URL** value in a GitHub webhook.
 
-**Configuration**
-
-Once deployed, copy the Azure Function Url and use the value in a GitHub webhook.
-
-## Solution depolyment parameters
+## Solution deployment parameters
 
 | Parameter | Type | Description |
 |---|---|---|
@@ -19,7 +15,7 @@ Once deployed, copy the Azure Function Url and use the value in a GitHub webhook
 | ADOOrganization | string | Azure DevOps organization name. |
 | ADOProjectName | string | Azure DevOps project name. |
 | AreaPath | string | Azure DevOps area path for the raised bugs. |
-| ItterationPath | string | Azure DevOps itteration path for the raised bugs. |
+| ItterationPath | string | Azure DevOps iteration path for the raised bugs. |
 | ADOParentWorkItem | string | The Azure DevOps URL for a parent work item for the raised bug. |
 | EmailAddress | string | Email address where function failure alerts will be sent. |
 | RemoveSourceControll | bool | When true, removes source control integration. |
