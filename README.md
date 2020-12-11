@@ -14,8 +14,8 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 | AzureDevOpsPAT | securestring | Azure DevOps personal access token. |
 | ADOOrganization | string | Azure DevOps organization name. |
 | ADOProjectName | string | Azure DevOps project name. |
-| AreaPath | string | Azure DevOps area path for the raised bugs. |
-| ItterationPath | string | Azure DevOps iteration path for the raised bugs. |
+| ADOAreaPath | string | Azure DevOps area path for the raised bugs. |
+| ADOItterationPath | string | Azure DevOps iteration path for the raised bugs. |
 | ADOParentWorkItem | string | The Azure DevOps URL for a parent work item for the raised bug. |
 | EmailAddress | string | Email address where function failure alerts will be sent. |
 | RemoveSourceControll | bool | When true, removes source control integration. |
