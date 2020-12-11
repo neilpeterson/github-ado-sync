@@ -25,6 +25,15 @@
         },
         "ADOProjectName": {
             "type": "string"
+        },
+        "ADOAreaPath": {
+            "type": "string"
+        },
+        "ADOItterationPath": {
+            "type": "string"
+        },
+        "ADOParentWorkItem": {
+            "type": "string"
         }
     },
     "variables": {
@@ -96,6 +105,18 @@
                         {
                             "name": "ADOProjectName",
                             "value": "[parameters('ADOProjectName')]"
+                        },
+                        {
+                            "name": "ADOAreaPath",
+                            "value": "[parameters('ADOAreaPath')]"
+                        },
+                        {
+                            "name": "ADOItterationPath",
+                            "value": "[parameters('ADOItterationPath')]"
+                        },
+                        {
+                            "name": "ADOParentWorkItem",
+                            "value": "[parameters('ADOParentWorkItem')]"
                         }
                     ],
                     "scmType": "None"

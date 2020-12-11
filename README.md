@@ -6,6 +6,10 @@ This solution deploys an Azure Function (PowerShell) that creates an Azure DevOp
 
 Once deployed, the Azure Function is connected to the GitHub repository, where the function is stored and configured for manual sync. The ARM template includes logic to remove this source control integration. See the parameters and examples for details on how to deploy without source control integration.
 
+**Configuration**
+
+Once deployed, copy the Azure Function Url and use the value in a GitHub webhook.
+
 ## Solution depolyment parameters
 
 | Parameter | Type | Description |
@@ -14,6 +18,9 @@ Once deployed, the Azure Function is connected to the GitHub repository, where t
 | AzureDevOpsPAT | securestring | Azure DevOps personal access token. |
 | ADOOrganization | string | Azure DevOps organization name. |
 | ADOProjectName | string | Azure DevOps project name. |
+| AreaPath | string | Azure DevOps area path for the raised bugs. |
+| ItterationPath | string | Azure DevOps itteration path for the raised bugs. |
+| ADOParentWorkItem | string | The Azure DevOps URL for a parent work item for the raised bug. |
 | EmailAddress | string | Email address where function failure alerts will be sent. |
 | RemoveSourceControll | bool | When true, will run a script to remove the function source control integration. |
 
@@ -30,25 +37,25 @@ Once deployed, the Azure Function is connected to the GitHub repository, where t
 Create a resource group for the deployment.
 
 ```azurecli
-az group create --name github-ado-sync --location eastus
+az group create --name github-ado-sync-102 --location eastus
 ```
 
 Run the following command to initiate the deployment.
 
 ```azurecli
 az deployment group create \
-    --resource-group github-ado-sync \
+    --resource-group github-ado-sync-102 \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
-    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com
+    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com AreaPath=test-area-path ItterationPath=test-iteration-path ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238
 ```
 
 Add `RemoveSourceControll=true` to remove source controll integration.
 
 ```azurecli
 az deployment group create \
-    --resource-group github-ado-sync \
+    --resource-group github-ado-sync-102 \
     --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
-    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com RemoveSourceControll=true
+    ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com AreaPath=test-area-path ItterationPath=test-iteration-path ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238 RemoveSourceControll=true
 ```

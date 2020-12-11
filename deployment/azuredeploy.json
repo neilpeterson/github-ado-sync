@@ -14,6 +14,15 @@
         "ADOProjectName": {
             "type": "string"
         },
+        "ADOAreaPath": {
+            "type": "string"
+        },
+        "ADOItterationPath": {
+            "type": "string"
+        },
+        "ADOParentWorkItem": {
+            "type": "string"
+        },
         "EmailAddress": {
             "type": "string"
         },
@@ -116,6 +125,15 @@
                     },
                     "ADOProjectName": {
                         "value": "[parameters('ADOProjectName')]"
+                    },
+                    "ADOAreaPath": {
+                        "value": "[parameters('ADOAreaPath')]"
+                    },
+                    "ADOItterationPath": {
+                        "value": "[parameters('ADOItterationPath')]"
+                    },
+                    "ADOParentWorkItem": {
+                        "value": "[parameters('ADOParentWorkItem')]"                    
                     }
                 }
             }

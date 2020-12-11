@@ -16,13 +16,16 @@ $AzureDevOpsPAT = $env:AzureDevOpsPAT
 $AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($AzureDevOpsPAT)")) }
 $ADOOrganization = $env:ADOOrganization
 $ADOProjectName = $env:ADOProjectName
+$ADOAreaPath = $env:ADOAreaPath
+$ADOItterationPath = $env:ADOItterationPath
+$ADOParentWorkItem = $env:ADOParentWorkItem
 
 # GitHub details
 $GitHubPAT = $env:GitHubPAT
 
 # Work item details
 $WorkItemType = "bug"
-$WorkItemTitle = '#, {0} - {1}' -f $GitHubIssueDetails
+$WorkItemTitle = '{0} - {1}' -f $GitHubIssueDetails
 $uri = $ADOOrganization + $ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
 
 
@@ -43,19 +46,19 @@ if($Request.Body.action -eq "Opened"){
         @{
             op      = 'add'
             path    = '/fields/System.AreaPath'
-            value   = 'arm-template-validation-pipelines\test-area-path'
+            value   = "$ADOProjectName\$ADOAreaPath"
         }
         @{
             op      = 'add'
             path    = '/fields/System.IterationPath'
-            value   = 'arm-template-validation-pipelines\test-iteration-path'
+            value   = "$ADOProjectName\$ADOItterationPath"
         }
         @{
             op      = 'add'
             path    = '/relations/-'
             value   = @{
                 rel     = 'System.LinkTypes.Hierarchy-Reverse'
-                url     = 'https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238'
+                url     = $ADOParentWorkItem
             }
         }
     )
