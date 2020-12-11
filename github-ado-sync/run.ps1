@@ -59,7 +59,7 @@ if($Request.Body.action -eq "Opened"){
 
     # GitHub POST body
     $bodyObjectGitHub = @{
-        body    = "Thanks for reporting - this issue is under review. This is a Microsoft Internal DevOps Bug ID <a href=${0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $env:ADOOrganization, $env:ADOProjectName, $ADOWorkItem.id
+        body    = "Thanks for reporting - this issue is under review. This is a Microsoft Internal DevOps Bug ID # <a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $env:ADOOrganization, $env:ADOProjectName, $ADOWorkItem.id
     }
 
     # Create GitHub comment
