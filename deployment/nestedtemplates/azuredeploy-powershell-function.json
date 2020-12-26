@@ -184,7 +184,7 @@
             "value": "[listkeys(concat(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '/host/default/'),'2018-02-01').masterkey]"
         },
         "identity": {
-            "type": "securestring",
+            "type": "string",
             "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2019-08-01', 'full').identity.principalId]"
         }
     }
