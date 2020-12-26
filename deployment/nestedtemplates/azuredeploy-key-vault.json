@@ -19,7 +19,7 @@
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2019-09-01",
-            "name": "[concat('keyvault', parameters('KeyVaultName'))]",
+            "name": "[parameters('KeyVaultName')]",
             "location": "[parameters('location')]",
             "properties": {
                 "enabledForDeployment": true,
