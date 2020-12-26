@@ -59,11 +59,11 @@
     "outputs": {
         "AzureDevOpsPATUri": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), parameters('AzureDevOpsPAT'))).secretUriWithVersion]"
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), 'AzureDevOpsPAT')).secretUriWithVersion]"
         },
         "GitHubPATUri": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), parameters('GitHubPAT'))).secretUriWithVersion]"
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), 'GitHubPAT')).secretUriWithVersion]"
         }
     }
 }
