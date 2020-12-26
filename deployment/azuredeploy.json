@@ -144,11 +144,11 @@
                     "location": {
                         "value": "[variables('location')]"
                     },
-                    "GitHubPAT": {
-                        "value": "[parameters('GitHubPAT')]"
+                    "GitHubPATUri": {
+                        "value": "[reference('key-vault').outputs.GitHubPATUri.value]"
                     },
-                    "AzureDevOpsPAT": {
-                        "value": "[parameters('AzureDevOpsPAT')]"
+                    "AzureDevOpsPATUri": {
+                        "value": "[reference('key-vault').outputs.AzureDevOpsPATUri.value]"
                     },
                     "ADOOrganization": {
                         "value": "[parameters('ADOOrganization')]"
