@@ -11,18 +11,27 @@ $GitHubIssueDetails = @(
     $Request.Body.issue.comments_url # Link to GitHub Issue API
 )
 
-# ADO Auth
-$AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($env:AzureDevOpsPAT)")) }
+$Strings = @(
+    "Request empty or not json, check GitHub webhook content type."
+    "Triggered .via GitHub webhook, non-issue open event, no action taken."
+    "Thanks for reporting - this issue is under review. This is a Microsoft Internal DevOps Bug ID #"
+)
+
+# Throw error if no request.body.action
+if (!$Request.Body.action) {throw $Strings[0]}
+
+# Write output after a non issue open event
+if ($Request.Body.action -ne "Opened") {Write-Output $Strings[1]}
 
 # Work item details
 $WorkItemType = "bug"
 $WorkItemTitle = '{0} - {1}' -f $GitHubIssueDetails
-$uri = $env:ADOOrganization + $env:ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
+$Uri = $env:ADOOrganization + $env:ADOProjectName + "/_apis/wit/workitems/$" + $WorkItemType + "?api-version=5.1"
 
 if($Request.Body.action -eq "Opened"){
 
     # ADO POST body
-    $bodyObjectADO = @(
+    $BodyObjectADO = @(
         @{
             op      = 'add'
             path    = '/fields/System.Title'
@@ -51,19 +60,20 @@ if($Request.Body.action -eq "Opened"){
                 url     = $env:ADOParentWorkItem
             }
         }
-    )
+    ) | ConvertTo-Json
 
     # Create ADO Work Item
-    $bodyADO = ConvertTo-Json -InputObject $bodyObjectADO
-    $ADOWorkItem = Invoke-RestMethod -Uri $uri -Method POST -Headers $AzureDevOpsAuthenicationHeader -ContentType "application/json-patch+json" -Body $bodyADO
+    $AzureDevOpsAuthenicationHeader = @{Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($env:AzureDevOpsPAT)"))}
+    Try {$ADOWorkItem = Invoke-RestMethod -Uri $uri -Method POST -Headers $AzureDevOpsAuthenicationHeader -ContentType "application/json-patch+json" -Body $BodyObjectADO}
+    Catch {throw $_.Exception.Message}
 
     # GitHub POST body
-    $bodyObjectGitHub = @{
-        body    = "Thanks for reporting - this issue is under review. This is a Microsoft Internal DevOps Bug ID # <a href={0}/{1}/_workitems/edit/{2}/>{2}</a>" -f $env:ADOOrganization, $env:ADOProjectName, $ADOWorkItem.id
-    }
+    $BodyObjectGitHub = @{
+        body = "{0} <a href={1}/{2}/_workitems/edit/{3}/>{3}</a>" -f $strings[2], $env:ADOOrganization, $env:ADOProjectName, $ADOWorkItem.id
+    } | ConvertTo-Json
 
     # Create GitHub comment
     $GitHubHeader = @{authorization = "Token $env:GitHubPAT"}
-    $bodyGitHub = ConvertTo-Json -InputObject $bodyObjectGitHub
-    Invoke-RestMethod -Uri $GitHubIssueDetails[3] -Method Post -ContentType "application/json-patch+json" -Headers $GitHubHeader -Body $bodyGitHub
+    Try {Invoke-RestMethod -Uri $GitHubIssueDetails[3] -Method Post -ContentType "application/json-patch+json" -Headers $GitHubHeader -Body $BodyObjectGitHub}
+    Catch {throw $_.Exception.Message}
 }
