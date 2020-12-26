@@ -41,7 +41,8 @@
         "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
         "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
         "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
-        "location": "[resourceGroup().location]"
+        "location": "[resourceGroup().location]",
+        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]"
     },
     "resources": [
         {
@@ -111,7 +112,7 @@
                         "value": "[variables('location')]"
                     },
                     "KeyVaultName": {
-                        "value": "[variables('uniqueName')]"
+                        "value": "[variables('kay-vault-name')]"
                     }
                 }
             }
@@ -186,7 +187,7 @@
                         "value": "[reference('powershell-function').outputs.identity.value]"
                     },
                     "KeyVaultName": {
-                        "value": "[variables('uniqueName')]"
+                        "value": "[variables('kay-vault-name')]"
                     }
                 }
             }
