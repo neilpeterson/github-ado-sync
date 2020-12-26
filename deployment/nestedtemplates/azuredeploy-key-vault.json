@@ -59,13 +59,13 @@
         }
     ],
     "outputs": {
-        // "AzureDevOpsPATUri": {
-        //     "type": "string",
-        //     "value": "value"
-        // },
-        // "GitHubPATUri": {
-        //     "type": "string",
-        //     "value": "value"
-        // }
+        "AzureDevOpsPATUri": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), parameters('AzureDevOpsPAT'))).secretUri]"
+        },
+        "GitHubPATUri": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('KeyVaultName'), parameters('GitHubPAT'))).secretUri]"
+        }
     }
 }
