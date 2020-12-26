@@ -34,7 +34,7 @@
             }
         },
         {
-            "name": "[concat(parameters('KeyVaultName'), '/', parameters('GitHubPAT'))]",
+            "name": "[concat(parameters('KeyVaultName'), '/GitHubPAT')]",
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2016-10-01",
             "dependsOn": [
@@ -45,7 +45,7 @@
             }
         },
         {
-            "name": "[concat(parameters('KeyVaultName'), '/', parameters('AzureDevOpsPAT'))]",
+            "name": "[concat(parameters('KeyVaultName'), '/AzureDevOpsPAT')]",
             "type": "Microsoft.KeyVault/vaults/secrets",
             "apiVersion": "2016-10-01",
             "dependsOn": [
