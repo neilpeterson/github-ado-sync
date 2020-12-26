@@ -51,14 +51,14 @@
             "name": "[parameters('functionAppName')]",
             "location": "[parameters('location')]",
             "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[resourceId('microsoft.insights/components/', parameters('functionAppName'))]"
             ],
-            "identity": {
-                "type": "SystemAssigned"
-            },
             "properties": {
                 "siteConfig": {
                     "appSettings": [
@@ -146,15 +146,15 @@
             "apiVersion": "2018-02-01",
             "name": "[variables('hostingPlanName')]",
             "location": "[parameters('location')]",
-            "properties": {
-                "name": "[variables('hostingPlanName')]",
-                "maximumElasticWorkerCount": 20
-            },
             "sku": {
                 "name": "Y1",
                 "tier": "Dynamic"
             },
-            "kind": "elastic"
+            "kind": "elastic",
+            "properties": {
+                "name": "[variables('hostingPlanName')]",
+                "maximumElasticWorkerCount": 20
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -171,9 +171,6 @@
             "apiVersion": "2020-02-02-preview",
             "name": "[parameters('functionAppName')]",
             "location": "[variables('ApplicationInsightsLocation')]",
-            "tags": {
-                "[concat('hidden-link:', resourceId('Microsoft.Web/sites/', parameters('functionAppName')))]": "Resource"
-            },
             "properties": {
                 "ApplicationId": "[parameters('functionAppName')]",
                 "Application_Type": "other",

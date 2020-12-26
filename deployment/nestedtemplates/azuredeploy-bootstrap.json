@@ -9,8 +9,6 @@
             "type": "string"
         }
     },
-    "functions": [],
-    "variables": {},
     "resources": [
         {
             "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
@@ -22,15 +20,15 @@
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2018-09-01-preview",
             "name": "[guid(resourceGroup().id)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'deploymentScript')]"
+            ],
             "properties": {
                 "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                 "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities','deploymentScript'), '2018-11-30').principalId]",
                 "scope": "[resourceGroup().id]",
                 "principalType": "ServicePrincipal"
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'deploymentScript')]"
-            ]
+            }
         },
         // Using PowerShell here for container image flexibility (Ubuntu vs. alpine).
         {
@@ -70,6 +68,5 @@
                 "[resourceId('Microsoft.Authorization/roleAssignments',guid(resourceGroup().id))]"
             ]
         }
-    ],
-    "outputs": {}
+    ]
 }
