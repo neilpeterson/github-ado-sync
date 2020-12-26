@@ -58,13 +58,13 @@
         }
     ],
     "outputs": {
-        "AzureDevOpsPATUri": {
-            "type": "string",
-            "value": "value"
-        },
-        "GitHubPATUri": {
-            "type": "string",
-            "value": "value"
-        }
+        // "AzureDevOpsPATUri": {
+        //     "type": "string",
+        //     "value": "value"
+        // },
+        // "GitHubPATUri": {
+        //     "type": "string",
+        //     "value": "value"
+        // }
     }
 }
