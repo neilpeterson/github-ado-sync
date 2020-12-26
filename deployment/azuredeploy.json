@@ -182,9 +182,6 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
                     "AccessIdentity": {
                         "value": "[reference('powershell-function').outputs.identity.value]"
                     },
