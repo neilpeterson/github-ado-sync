@@ -121,7 +121,8 @@
             "apiVersion": "2019-10-01",
             "name": "powershell-function",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]"
+                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]",
+                "[resourceId('Microsoft.Resources/deployments', 'key-vault')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -170,6 +171,10 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "key-vault-access",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'key-vault')]",
+                "[resourceId('Microsoft.Resources/deployments', 'powershell-function')]"
+            ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {

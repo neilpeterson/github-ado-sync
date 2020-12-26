@@ -25,16 +25,16 @@ Once deployed, copy the Azure Function Url and use it as the **Payload URL** val
 Create a resource group for the deployment.
 
 ```azurecli
-az group create --name github-ado-sync --location eastus
+az group create --name github-ado-sync-kv-001 --location eastus
 ```
 
 Run the following command to initiate the deployment (update with details from your environment).
 
 ```azurecli
 az deployment group create \
-    --resource-group github-ado-sync \
-    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/master/deployment/azuredeploy.json \
-    --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
+    --resource-group github-ado-sync-kv-001 \
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/add-keyvault/deployment/azuredeploy.json \
+    --parameters GitHubPAT=AAA AzureDevOpsPAT=BBB ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \
     ADOParentWorkItem=https://dev.azure.com/nepeters-devops/arm-template-validation-pipelines/_apis/wit/workItems/238
