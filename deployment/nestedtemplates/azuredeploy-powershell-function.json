@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "location": {
+            "type": "string"
+        },
         "workSpaceResourceId": {
             "type": "string"
         },
@@ -9,9 +12,6 @@
             "type": "string"
         },
         "functionSourceRepo": {
-            "type": "string"
-        },
-        "location": {
             "type": "string"
         },
         "GitHubPATUri": {
@@ -47,7 +47,7 @@
     "resources": [
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2020-06-01",
             "name": "[parameters('functionAppName')]",
             "location": "[parameters('location')]",
             "kind": "functionapp",
@@ -128,7 +128,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2018-11-01",
+                    "apiVersion": "2020-06-01",
                     "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites/', parameters('functionAppName'))]"
@@ -143,7 +143,7 @@
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('hostingPlanName')]",
             "location": "[parameters('location')]",
             "sku": {
@@ -158,7 +158,7 @@
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-06-01",
             "name": "[variables('storageAccountName')]",
             "location": "[parameters('location')]",
             "sku": {
@@ -180,11 +180,11 @@
     ],
     "outputs": {
         "functionKey": {
-            "type": "string",
+            "type": "securestring",
             "value": "[listkeys(concat(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '/host/default/'),'2018-02-01').masterkey]"
         },
         "identity": {
-            "type": "string",
+            "type": "securestring",
             "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2019-08-01', 'full').identity.principalId]"
         }
     }

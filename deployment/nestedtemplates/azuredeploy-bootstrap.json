@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "functionAppName": {
+        "location": {
             "type": "string"
         },
-        "location": {
+        "functionAppName": {
             "type": "string"
         }
     },
@@ -18,7 +18,7 @@
         },
         {
             "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2018-09-01-preview",
+            "apiVersion": "2020-04-01-preview",
             "name": "[guid(resourceGroup().id)]",
             "dependsOn": [
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'deploymentScript')]"
@@ -35,7 +35,7 @@
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2019-10-01-preview",
             "name": "runPowerShellInline",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "kind": "AzurePowerShell",
             "identity": {
                 "type": "UserAssigned",

@@ -38,11 +38,11 @@
         "alert-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-alert.json')]",
         "key-vault-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault.json')]",
         "key-vault-access-tempalte": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault-access.json')]",
-        "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
-        "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
-        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
         "location": "[resourceGroup().location]",
-        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]"
+        "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
+        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]",
+        "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
+        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git"
     },
     "resources": [
         {

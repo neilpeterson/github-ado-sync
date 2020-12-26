@@ -35,7 +35,7 @@
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2016-10-01",
+            "apiVersion": "2019-09-01",
             "name": "[concat(parameters('KeyVaultName'), '/GitHubPAT')]",
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
@@ -46,7 +46,7 @@
         },
         {
             "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2016-10-01",
+            "apiVersion": "2019-09-01",
             "name": "[concat(parameters('KeyVaultName'), '/AzureDevOpsPAT')]",
             "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('KeyVaultName'))]"
