@@ -29,7 +29,8 @@
                 "sku": {
                     "name": "standard",
                     "family": "A"
-                }
+                },
+                "accessPolicies": []
             },
             "resources": [
                 {
