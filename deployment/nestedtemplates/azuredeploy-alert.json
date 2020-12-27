@@ -29,8 +29,8 @@
                     "queryType": "ResultCount"
                 },
                 "schedule": {
-                    "frequencyInMinutes": 5,
-                    "timeWindowInMinutes": 5
+                    "frequencyInMinutes": 10,
+                    "timeWindowInMinutes": 10
                 },
                 "action": {
                     "severity": "3",
