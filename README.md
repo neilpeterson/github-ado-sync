@@ -4,7 +4,9 @@ This solution deploys an HTTP triggered Azure Function (PowerShell) and all supp
 
 ## Configuration
 
-Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook.
+Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook and select a content type of 'application/json'.
+
+![Image showing the configuration of a Github webhook.](images/github-webhook.png)
 
 ## Solution deployment parameters
 
