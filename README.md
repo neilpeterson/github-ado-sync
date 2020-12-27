@@ -1,12 +1,10 @@
 # GitHub ADO Sync
 
-This solution deploys an HTTP triggered Azure Function (PowerShell) and all supporting infrastructure. The function is activated by a GitHub repository webhook each time a GitHub issue is created. The function creates an Azure DevOps Boards work item and updates the GitHub issue with these details. An Azure Monitor alert is also created, which sends an email to a specified email address when a function failure occurs.
+This solution deploys an HTTP triggered Azure Function (PowerShell) and all supporting infrastructure. The function is activated by a GitHub webhook each time a GitHub issue is created. When executed, an Azure DevOps Boards work item is created, and the GitHub issue is updated with these details. An Azure Monitor alert is also created, which sends an email to a specified email address when a function failure occurs. All GitHub and Azure DevOps secrets are stored in and retrieved from Azure Key Vault.
 
 ## Configuration
 
 Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook and select a content type of 'application/json'.
-
-![Image showing the configuration of a Github webhook.](images/github-webhook.png)
 
 ## Solution deployment parameters
 
@@ -35,7 +33,7 @@ Run the following command to initiate the deployment (update with details from y
 ```azurecli
 az deployment group create \
     --resource-group github-ado-sync \
-    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/deployment/azuredeploy.json \
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \
@@ -47,7 +45,7 @@ Add `RemoveSourceControll=true` to remove source controll integration.
 ```azurecli
 az deployment group create \
     --resource-group github-ado-sync \
-    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/master/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \
