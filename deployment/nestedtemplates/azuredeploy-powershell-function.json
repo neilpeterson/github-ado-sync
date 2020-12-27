@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "location": {
+            "type": "string"
+        },
         "workSpaceResourceId": {
             "type": "string"
         },
@@ -11,13 +14,10 @@
         "functionSourceRepo": {
             "type": "string"
         },
-        "location": {
-            "type": "string"
-        },
-        "GitHubPAT": {
+        "GitHubPATUri": {
             "type": "securestring"
         },
-        "AzureDevOpsPAT": {
+        "AzureDevOpsPATUri": {
             "type": "securestring"
         },
         "ADOOrganization": {
@@ -47,18 +47,18 @@
     "resources": [
         {
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2020-06-01",
             "name": "[parameters('functionAppName')]",
             "location": "[parameters('location')]",
             "kind": "functionapp",
+            "identity": {
+                "type": "SystemAssigned"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[resourceId('microsoft.insights/components/', parameters('functionAppName'))]"
             ],
-            "identity": {
-                "type": "SystemAssigned"
-            },
             "properties": {
                 "siteConfig": {
                     "appSettings": [
@@ -92,11 +92,11 @@
                         },
                         {
                             "name": "GitHubPAT",
-                            "value": "[parameters('GitHubPAT')]"
+                            "value": "[concat('@Microsoft.KeyVault(SecretUri=', parameters('GitHubPATUri'), ')')]"
                         },
                         {
                             "name": "AzureDevOpsPAT",
-                            "value": "[parameters('AzureDevOpsPAT')]"
+                            "value": "[concat('@Microsoft.KeyVault(SecretUri=', parameters('AzureDevOpsPATUri'), ')')]"
                         },
                         {
                             "name": "ADOOrganization",
@@ -128,7 +128,7 @@
             "resources": [
                 {
                     "type": "sourcecontrols",
-                    "apiVersion": "2018-11-01",
+                    "apiVersion": "2020-06-01",
                     "name": "web",
                     "dependsOn": [
                         "[resourceId('Microsoft.Web/Sites/', parameters('functionAppName'))]"
@@ -143,22 +143,22 @@
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2018-02-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('hostingPlanName')]",
             "location": "[parameters('location')]",
-            "properties": {
-                "name": "[variables('hostingPlanName')]",
-                "maximumElasticWorkerCount": 20
-            },
             "sku": {
                 "name": "Y1",
                 "tier": "Dynamic"
             },
-            "kind": "elastic"
+            "kind": "elastic",
+            "properties": {
+                "name": "[variables('hostingPlanName')]",
+                "maximumElasticWorkerCount": 20
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-06-01",
             "name": "[variables('storageAccountName')]",
             "location": "[parameters('location')]",
             "sku": {
@@ -171,9 +171,6 @@
             "apiVersion": "2020-02-02-preview",
             "name": "[parameters('functionAppName')]",
             "location": "[variables('ApplicationInsightsLocation')]",
-            "tags": {
-                "[concat('hidden-link:', resourceId('Microsoft.Web/sites/', parameters('functionAppName')))]": "Resource"
-            },
             "properties": {
                 "ApplicationId": "[parameters('functionAppName')]",
                 "Application_Type": "other",
@@ -183,8 +180,12 @@
     ],
     "outputs": {
         "functionKey": {
-            "type": "string",
+            "type": "securestring",
             "value": "[listkeys(concat(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '/host/default/'),'2018-02-01').masterkey]"
+        },
+        "identity": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2019-08-01', 'full').identity.principalId]"
         }
     }
 }

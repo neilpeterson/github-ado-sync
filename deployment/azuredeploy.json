@@ -36,10 +36,13 @@
         "powershell-function-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-powershell-function.json')]",
         "bootstrap-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-bootstrap.json')]",
         "alert-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-alert.json')]",
-        "functionAppName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
+        "key-vault-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault.json')]",
+        "key-vault-access-tempalte": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault-access.json')]",
+        "location": "[resourceGroup().location]",
+        "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
+        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]",
         "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
-        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
-        "location": "[resourceGroup().location]"
+        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync-archive.git"
     },
     "resources": [
         {
@@ -91,9 +94,36 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
+            "name": "key-vault",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('key-vault-template')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "GitHubPAT": {
+                        "value": "[parameters('GitHubPAT')]"
+                    },
+                    "AzureDevOpsPAT": {
+                        "value": "[parameters('AzureDevOpsPAT')]"
+                    },
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "KeyVaultName": {
+                        "value": "[variables('kay-vault-name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
             "name": "powershell-function",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]"
+                "[resourceId('Microsoft.Resources/deployments', 'log-analytics')]",
+                "[resourceId('Microsoft.Resources/deployments', 'key-vault')]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -106,7 +136,7 @@
                         "value": "[reference('log-analytics').outputs.workSpaceResourceId.value]"
                     },
                     "functionAppName": {
-                        "value": "[variables('functionAppName')]"
+                        "value": "[variables('uniqueName')]"
                     },
                     "functionSourceRepo": {
                         "value": "[variables('functionSourceRepo')]"
@@ -114,11 +144,11 @@
                     "location": {
                         "value": "[variables('location')]"
                     },
-                    "GitHubPAT": {
-                        "value": "[parameters('GitHubPAT')]"
+                    "GitHubPATUri": {
+                        "value": "[reference('key-vault').outputs.GitHubPATUri.value]"
                     },
-                    "AzureDevOpsPAT": {
-                        "value": "[parameters('AzureDevOpsPAT')]"
+                    "AzureDevOpsPATUri": {
+                        "value": "[reference('key-vault').outputs.AzureDevOpsPATUri.value]"
                     },
                     "ADOOrganization": {
                         "value": "[parameters('ADOOrganization')]"
@@ -139,6 +169,30 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "key-vault-access",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'key-vault')]",
+                "[resourceId('Microsoft.Resources/deployments', 'powershell-function')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('key-vault-access-tempalte')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "AccessIdentity": {
+                        "value": "[reference('powershell-function').outputs.identity.value]"
+                    },
+                    "KeyVaultName": {
+                        "value": "[variables('kay-vault-name')]"
+                    }
+                }
+            }
+        },
+        {
             "condition": "[parameters('RemoveSourceControll')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
@@ -154,7 +208,7 @@
                 },
                 "parameters": {
                     "functionAppName": {
-                        "value": "[variables('functionAppName')]"
+                        "value": "[variables('uniqueName')]"
                     },
                     "location": {
                         "value": "[variables('location')]"

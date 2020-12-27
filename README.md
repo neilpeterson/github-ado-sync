@@ -4,7 +4,9 @@ This solution deploys an HTTP triggered Azure Function (PowerShell) and all supp
 
 ## Configuration
 
-Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook.
+Once deployed, copy the Azure Function Url and use it as the **Payload URL** value on a GitHub webhook and select a content type of 'application/json'.
+
+![Image showing the configuration of a Github webhook.](images/github-webhook.png)
 
 ## Solution deployment parameters
 
@@ -33,7 +35,7 @@ Run the following command to initiate the deployment (update with details from y
 ```azurecli
 az deployment group create \
     --resource-group github-ado-sync \
-    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync/master/deployment/azuredeploy.json \
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \

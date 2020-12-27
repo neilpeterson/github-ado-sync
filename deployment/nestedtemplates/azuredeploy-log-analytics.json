@@ -12,7 +12,7 @@
     "resources": [
         {
             "type": "Microsoft.OperationalInsights/workspaces",
-            "apiVersion": "2020-03-01-preview",
+            "apiVersion": "2020-08-01",
             "name": "[variables('workspaceName')]",
             "location": "[parameters('location')]",
             "properties": {
@@ -35,7 +35,7 @@
             "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('WorkspaceName')), '2015-03-20').customerId]"
         },
         "workSpaceKey": {
-            "type": "string",
+            "type": "securestring",
             "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('WorkspaceName')), '2015-03-20').primarySharedKey]"
         },
         "workSpaceResourceId": {

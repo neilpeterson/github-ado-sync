@@ -2,13 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "location": {
+            "type": "string"
+        },
         "workspaceName": {
             "type": "string"
         },
         "alertQuery": {
-            "type": "string"
-        },
-        "location": {
             "type": "string"
         },
         "emailAddress": {
@@ -25,7 +25,6 @@
                 "enabled": "true",
                 "source": {
                     "query": "[parameters('alertQuery')]",
-                    "authorizedResources": [],
                     "dataSourceId": "[resourceId('microsoft.operationalinsights/workspaces', parameters('workspaceName'))]",
                     "queryType": "ResultCount"
                 },
@@ -62,15 +61,7 @@
                         "emailAddress": "[parameters('emailAddress')]",
                         "useCommonAlertSchema": false
                     }
-                ],
-                "smsReceivers": [],
-                "webhookReceivers": [],
-                "itsmReceivers": [],
-                "azureAppPushReceivers": [],
-                "automationRunbookReceivers": [],
-                "voiceReceivers": [],
-                "logicAppReceivers": [],
-                "azureFunctionReceivers": []
+                ]
             }
         }
     ]
