@@ -35,7 +35,7 @@ Run the following command to initiate the deployment (update with details from y
 ```azurecli
 az deployment group create \
     --resource-group github-ado \
-    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/add-keyvault/deployment/azuredeploy.json \
+    --template-uri https://raw.githubusercontent.com/neilpeterson/github-ado-sync-archive/deployment/azuredeploy.json \
     --parameters GitHubPAT=<> AzureDevOpsPAT=<> ADOOrganization=https://nepeters-devops.visualstudio.com/ \
     ADOProjectName=arm-template-validation-pipelines EmailAddress=nepeters@microsoft.com ADOAreaPath=test-area-path \
     ADOItterationPath=test-iteration-path \
