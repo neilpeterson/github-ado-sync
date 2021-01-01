@@ -32,20 +32,21 @@
         }
     },
     "variables": {
+        "alert-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-alert.json')]",
+        "bootstrap-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-bootstrap.json')]",
+        "key-vault-access-tempalte": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault-access.json')]",
+        "key-vault-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault.json')]",
         "log-analytics-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-log-analytics.json')]",
         "powershell-function-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-powershell-function.json')]",
-        "bootstrap-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-bootstrap.json')]",
-        "alert-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-alert.json')]",
-        "key-vault-template": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault.json')]",
-        "key-vault-access-tempalte": "[uri(deployment().properties.templateLink.uri, 'nestedtemplates/azuredeploy-key-vault-access.json')]",
-        "location": "[resourceGroup().location]",
-        "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]",
-        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]",
         "alertQuery": "[concat('AppRequests\n| where TimeGenerated > ago(10m) \n| where Name == ''github-ado-sync''\n| where Success == false')]",
-        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git"
+        "functionSourceRepo": "https://github.com/neilpeterson/github-ado-sync.git",
+        "kay-vault-name": "[concat('kv',variables('uniqueName'), 'kv')]",
+        "location": "[resourceGroup().location]",
+        "uniqueName": "[uniqueString(subscription().subscriptionId, resourceGroup().id)]"
     },
     "resources": [
         {
+            "comments": "Deploys a Log Analytics workspace.",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "log-analytics",
@@ -63,6 +64,7 @@
             }
         },
         {
+            "comments": "Deploys an alert (function execution failure) and an action group to send an email on alert.",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "alert",
@@ -92,6 +94,7 @@
             }
         },
         {
+            "comments": "Deploys an Azure Key Vault instance and creates secrets for both GitHub and ADO access.",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "key-vault",
@@ -118,6 +121,7 @@
             }
         },
         {
+            "comments": "Deploys an Azure PowerShell function and all related app service infrastructure. The function logic comes from a source control resource.",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "powershell-function",
@@ -169,6 +173,7 @@
             }
         },
         {
+            "comments": "Grants the Azure Function created identity read access to Key Vault secrets.",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "name": "key-vault-access",
@@ -193,6 +198,7 @@
             }
         },
         {
+            "comments": "Optional, deploys a deployment script resource to remove the function's source control integration.",
             "condition": "[parameters('RemoveSourceControll')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
